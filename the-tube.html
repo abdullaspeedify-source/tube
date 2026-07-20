@@ -1,0 +1,2884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0f0f0f">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src https: data:; connect-src 'self' https://broad-resonance-c0a6.abdulla-speedify.workers.dev; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://piped.video https://piped.kavin.rocks; base-uri 'self'; form-action 'self';">
+<title>The Tube</title>
+<style>
+  :root {
+    --bg-primary: #0f0f0f;
+    --bg-secondary: #212121;
+    --bg-hover: #3f3f3f;
+    --bg-card: #181818;
+    --bg-searchbar: #121212;
+    --text-primary: #ffffff;
+    --text-secondary: #aaaaaa;
+    --border-color: #222222;
+    --accent-red: #ff0000;
+    --icon-color: #f1f1f1;
+    --sidebar-width: 240px;
+    --sidebar-collapsed-width: 72px;
+    --topbar-height: 56px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: "Roboto", Arial, sans-serif;
+    overflow-x: hidden;
+  }
+
+  a { text-decoration: none; color: inherit; }
+  button { cursor: pointer; font-family: inherit; }
+
+  /* ---------------- TOP NAV ---------------- */
+  .top-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: calc(var(--topbar-height) + env(safe-area-inset-top, 0px));
+    padding-top: env(safe-area-inset-top, 0px);
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    z-index: 1000;
+    border-bottom: 1px solid transparent;
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 200px;
+  }
+
+  .icon-btn {
+    background: none;
+    border: none;
+    color: var(--icon-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+  }
+
+  .icon-btn:hover { background: var(--bg-hover); }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    cursor: pointer;
+  }
+
+  .logo .logo-the {
+    color: var(--text-primary);
+  }
+
+  .logo .logo-tube-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-red);
+    color: #fff;
+    padding: 2px 8px 2px 20px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .logo .logo-tube-wrap::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid #fff;
+  }
+
+  .nav-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .search-wrapper {
+    display: flex;
+    width: 100%;
+    height: 40px;
+  }
+
+  .search-input {
+    flex: 1;
+    background: var(--bg-searchbar);
+    border: 1px solid #303030;
+    border-right: none;
+    border-radius: 20px 0 0 20px;
+    padding: 0 16px;
+    color: var(--text-primary);
+    font-size: 16px;
+    outline: none;
+  }
+
+  .search-input:focus {
+    border-color: #1c62b9;
+  }
+
+  .search-btn {
+    width: 64px;
+    background: var(--bg-secondary);
+    border: 1px solid #303030;
+    border-radius: 0 20px 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--icon-color);
+  }
+
+  .search-btn:hover { background: var(--bg-hover); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 150px;
+    justify-content: flex-end;
+  }
+
+  .avatar-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7b2ff7, #f107a3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-left: 8px;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+  .signin-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid #3ea6ff;
+    color: #3ea6ff;
+    border-radius: 18px;
+    padding: 7px 14px 7px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: 8px;
+    white-space: nowrap;
+  }
+  .signin-btn:hover { background: rgba(62,166,255,0.1); }
+
+  .account-menu { position: relative; }
+
+  .account-dropdown {
+    display: none;
+    position: absolute;
+    top: 44px;
+    right: 0;
+    background: #282828;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    padding: 14px 16px;
+    min-width: 220px;
+    z-index: 200;
+  }
+  .account-dropdown.open { display: block; }
+  .account-dropdown-name { color: #fff; font-weight: 600; font-size: 14px; }
+  .account-dropdown-email { color: var(--text-secondary); font-size: 12px; margin-top: 2px; margin-bottom: 12px; }
+  .account-signout-btn {
+    width: 100%;
+    background: #3f3f3f;
+    color: #fff;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 0;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .account-signout-btn:hover { background: #4d4d4d; }
+
+  .action-pill.active-toggle { background: #3ea6ff; color: #0f0f0f; }
+  .action-pill.active-toggle svg { fill: #0f0f0f; }
+  .action-pill:disabled { opacity: 0.5; cursor: default; }
+
+  /* ---------------- COMMENTS ---------------- */
+  .comments-section { margin-top: 24px; }
+  .comments-count { color: #fff; font-size: 16px; font-weight: 600; margin-bottom: 20px; }
+
+  .comment-compose {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .comment-compose .channel-avatar { flex-shrink: 0; }
+  .comment-compose-input-wrap { flex: 1; }
+  .comment-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #3f3f3f;
+    color: #fff;
+    font-size: 14px;
+    padding: 6px 0;
+    outline: none;
+    font-family: inherit;
+  }
+  .comment-input:focus { border-bottom-color: #fff; }
+  .comment-compose-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .comment-btn {
+    border: none;
+    border-radius: 18px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .comment-btn.primary { background: #3ea6ff; color: #0f0f0f; }
+  .comment-btn.primary:disabled { background: #3f3f3f; color: #909090; cursor: default; }
+  .comment-btn.secondary { background: transparent; color: var(--text-secondary); }
+
+  .comment-signin-hint {
+    color: var(--text-secondary);
+    font-size: 13px;
+    padding: 10px 0 24px;
+  }
+  .comment-signin-hint a { color: #3ea6ff; cursor: pointer; }
+
+  .comment-item { display: flex; gap: 12px; margin-bottom: 20px; }
+  .comment-item .channel-avatar { flex-shrink: 0; }
+  .comment-body { flex: 1; }
+  .comment-author-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+  .comment-author { color: #fff; font-size: 13px; font-weight: 600; }
+  .comment-time { color: var(--text-secondary); font-size: 12px; }
+  .comment-text { color: #fff; font-size: 14px; line-height: 1.4; white-space: pre-wrap; }
+  .comment-loading { color: var(--text-secondary); font-size: 13px; padding: 10px 0; }
+
+  /* ---------------- LAYOUT ---------------- */
+  .app-body {
+    display: flex;
+    margin-top: calc(var(--topbar-height) + env(safe-area-inset-top, 0px));
+  }
+
+  .sidebar {
+    position: fixed;
+    top: calc(var(--topbar-height) + env(safe-area-inset-top, 0px));
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--bg-primary);
+    overflow-y: auto;
+    transition: width 0.2s ease;
+    padding: 12px 0;
+    z-index: 900;
+  }
+
+  .sidebar.collapsed { width: var(--sidebar-collapsed-width); }
+
+  .sidebar.collapsed .nav-item span.label { display: none; }
+  .sidebar.collapsed .nav-item { flex-direction: column; gap: 6px; padding: 12px 0; font-size: 10px; }
+  .sidebar.collapsed .nav-section-title { display: none; }
+  .sidebar.collapsed .nav-item { align-items: center; }
+
+  .nav-section {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+
+  .nav-section-title {
+    padding: 8px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 24px;
+    border-radius: 10px;
+    margin: 0 8px;
+    font-size: 14px;
+    color: var(--text-primary);
+  }
+
+  .nav-item:hover { background: var(--bg-hover); }
+  .nav-item.active { background: var(--bg-hover); font-weight: 600; }
+
+  .nav-item svg { flex-shrink: 0; width: 22px; height: 22px; }
+
+  .main-content {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    padding: 24px 24px 60px;
+    transition: margin-left 0.2s ease;
+    width: calc(100% - var(--sidebar-width));
+  }
+
+  .main-content.expanded {
+    margin-left: var(--sidebar-collapsed-width);
+    width: calc(100% - var(--sidebar-collapsed-width));
+  }
+
+  .category-chips {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .chip {
+    background: var(--bg-secondary);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    border: none;
+    color: var(--text-primary);
+  }
+
+  .chip.active { background: var(--text-primary); color: var(--bg-primary); font-weight: 500; }
+  .chip:hover:not(.active) { background: var(--bg-hover); }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px 16px;
+  }
+
+  .video-card {
+    cursor: pointer;
+  }
+
+  .thumbnail-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .thumbnail-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  .video-card:hover .thumbnail-wrapper img {
+    transform: scale(1.03);
+  }
+
+  .duration-badge {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    font-size: 12px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .video-info {
+    display: flex;
+    gap: 12px;
+  }
+
+  .channel-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff512f, #dd2476);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .video-text { display: flex; flex-direction: column; min-width: 0; }
+
+  .video-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .channel-name, .video-meta {
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-secondary);
+  }
+
+  .no-results svg { margin-bottom: 16px; opacity: 0.5; }
+
+  .load-more-row {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 40px;
+  }
+
+  .load-more-btn {
+    background: var(--bg-elevated, #272727);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .load-more-btn:hover { background: #3a3a3a; }
+  .load-more-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .subs-back-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 4px 0 20px;
+  }
+  .subs-back-btn {
+    background: var(--bg-elevated, #272727);
+    color: #fff;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .subs-back-btn:hover { background: #3a3a3a; }
+  #subs-channel-heading { color: #fff; font-size: 16px; font-weight: 600; }
+
+  .subs-channel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+    padding-bottom: 30px;
+  }
+  .subs-channel-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 16px 8px;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+  }
+  .subs-channel-card:hover { background: var(--bg-hover, #272727); }
+  .subs-channel-card img {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .subs-channel-card .subs-channel-name { color: #fff; font-size: 13px; font-weight: 600; }
+
+  .search-channel-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .search-channel-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: var(--bg-hover, #272727);
+    cursor: pointer;
+  }
+  .search-channel-card:hover { background: #323232; }
+  .search-channel-card img {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .search-channel-card .search-channel-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .search-channel-card .search-channel-name {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .search-channel-card .search-channel-tag {
+    color: var(--text-secondary, #aaa);
+    font-size: 12px;
+  }
+  .search-channel-card .search-channel-sub-btn {
+    flex-shrink: 0;
+    background: #272727;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 8px 16px;
+    border-radius: 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .search-channel-card .search-channel-sub-btn:hover { background: #3a3a3a; }
+  .search-channel-card .search-channel-sub-btn.active-toggle {
+    background: transparent;
+    border-color: rgba(255,255,255,0.15);
+    color: var(--text-secondary, #aaa);
+  }
+
+  .subs-signin-prompt {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-secondary);
+  }
+  .subs-signin-prompt svg { margin-bottom: 16px; opacity: 0.5; }
+  .subs-signin-prompt .modal-btn { margin-top: 16px; }
+
+  .loading-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+  }
+
+  /* ---------------- WATCH VIEW (SPA, no popups / no refresh) ---------------- */
+  #home-view { display: block; }
+  #watch-view { display: none; }
+  #watch-view.active { display: block; }
+  #home-view.hidden { display: none; }
+
+  .watch-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    max-width: 1600px;
+  }
+
+  .watch-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .watch-player-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  /* Settings modal (API key connection) */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-backdrop.active { display: flex; }
+
+  .modal-panel {
+    background: #212121;
+    border-radius: 12px;
+    width: 420px;
+    max-width: 90vw;
+    padding: 20px 22px 22px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .modal-header h2 { font-size: 18px; font-weight: 600; }
+
+  .modal-status {
+    font-size: 13px;
+    color: #aaa;
+    margin: 6px 0 16px;
+    padding: 8px 10px;
+    background: #181818;
+    border-radius: 6px;
+  }
+  .modal-status.connected { color: #5cd65c; }
+
+  .modal-label {
+    display: block;
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 6px;
+  }
+
+  .modal-input {
+    width: 100%;
+    background: #121212;
+    border: 1px solid #3a3a3a;
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  .modal-input:focus { outline: none; border-color: var(--accent-red); }
+
+  .modal-hint {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .modal-hint a { color: #6ab7ff; }
+
+  .modal-error {
+    font-size: 12px;
+    color: #ff6b6b;
+    min-height: 16px;
+    margin-bottom: 6px;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .modal-btn {
+    padding: 9px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+  }
+  .modal-btn.secondary { background: transparent; color: #ccc; }
+  .modal-btn.secondary:hover { background: rgba(255,255,255,0.08); }
+  .modal-btn.primary { background: var(--accent-red); color: #fff; }
+  .modal-btn.primary:hover { filter: brightness(1.1); }
+  .modal-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .modal-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin: 16px 0;
+  }
+  .modal-subheading {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: #eee;
+  }
+  .player-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+  .player-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    color: #ddd;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+  }
+  .player-option:hover { background: rgba(255,255,255,0.09); }
+  .player-option.selected {
+    border-color: var(--accent-red);
+    background: rgba(227,51,51,0.12);
+    color: #fff;
+  }
+  .player-option .player-check {
+    width: 16px; height: 16px; flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.35);
+  }
+  .player-option.selected .player-check {
+    background: var(--accent-red);
+    border-color: var(--accent-red);
+  }
+
+  /* Real (YouTube-embedded) player + fallback link */
+  .watch-player-wrapper iframe {
+    width: 100%; height: 100%; border: none; display: block; background: #000;
+  }
+  .yt-fallback-link {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    color: #6ab7ff;
+    padding: 6px 0 0;
+  }
+
+  /* Overlay shown when the embedded video seems stuck / hasn't loaded */
+  .yt-fallback-overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.82);
+    z-index: 5;
+    padding: 20px;
+  }
+  .yt-fallback-overlay.show { display: flex; }
+  .yt-fallback-card {
+    max-width: 360px;
+    text-align: center;
+    color: #eee;
+  }
+  .yt-fallback-card p {
+    margin: 0 0 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #ccc;
+  }
+  .yt-fallback-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .yt-fallback-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  .yt-fallback-btn:hover { background: rgba(255,255,255,0.16); }
+  .yt-fallback-btn.primary {
+    background: var(--accent-red, #e33);
+    border-color: transparent;
+  }
+  .yt-fallback-btn.primary:hover { filter: brightness(1.1); }
+  .yt-fallback-overlay.terminal .yt-fallback-card p { color: #fff; }
+
+  .loading-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #aaa;
+    padding: 60px 20px;
+    font-size: 14px;
+  }
+
+  .watch-player-wrapper canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: pointer;
+  }
+
+  .player-center-btn {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .player-center-btn svg { margin-left: 4px; }
+  .player-center-btn.show { opacity: 1; }
+
+  .player-controls {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 10px 14px 8px;
+    background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0));
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .watch-player-wrapper:hover .player-controls,
+  .watch-player-wrapper.paused .player-controls,
+  .watch-player-wrapper.scrubbing .player-controls {
+    opacity: 1;
+  }
+
+  /* Touch devices don't have a real :hover state, so controls would
+     otherwise only appear while paused/scrubbing — always show them here
+     instead, and give touch targets more room to tap accurately. */
+  @media (hover: none) and (pointer: coarse) {
+    .player-controls { opacity: 1; }
+    .player-btn { width: 44px; height: 44px; }
+    .icon-btn { width: 44px; height: 44px; }
+    /* Keep the visual bar thin but pad the actual tappable area taller,
+       via a transparent extension above/below rather than resizing the
+       visible track itself. */
+    .progress-track { padding: 14px 0; margin: -14px 0 -4px; background: none; }
+    .progress-track::before {
+      content: "";
+      position: absolute; left: 0; right: 0; top: 14px;
+      height: 4px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 2px;
+    }
+    .progress-fill { top: 14px; bottom: auto; height: 4px; }
+    .progress-handle {
+      top: 16px;
+      width: 18px; height: 18px;
+    }
+  }
+
+  .progress-track {
+    position: relative;
+    height: 4px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 2px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+
+  .progress-fill {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 0%;
+    background: var(--accent-red);
+    border-radius: 2px;
+  }
+
+  .progress-handle {
+    position: absolute;
+    top: 50%; left: 0%;
+    width: 13px; height: 13px;
+    background: var(--accent-red);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .controls-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .player-btn {
+    background: none;
+    border: none;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+  }
+
+  .player-btn:hover { background: rgba(255,255,255,0.15); }
+
+  .time-display {
+    color: #fff;
+    font-size: 13px;
+    margin-left: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .controls-spacer { flex: 1; }
+
+  .watch-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 16px;
+    line-height: 1.3;
+  }
+
+  .watch-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    gap: 14px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+  }
+
+  .watch-channel-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .watch-channel-text { display: flex; flex-direction: column; }
+  .watch-channel-name { font-size: 15px; font-weight: 600; }
+  .watch-channel-sub { font-size: 12px; color: var(--text-secondary); }
+
+  .watch-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .action-pill {
+    background: var(--bg-secondary);
+    border: none;
+    color: var(--text-primary);
+    padding: 9px 16px;
+    border-radius: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .action-pill:hover { background: var(--bg-hover); }
+
+  .watch-description {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  .desc-stats {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .desc-stats span { color: var(--text-secondary); font-weight: 400; }
+
+  .watch-sidebar {
+    width: 400px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .rec-sidebar-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .rec-card {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+  }
+
+  .rec-card:hover { background: var(--bg-hover); }
+
+  .rec-thumb {
+    position: relative;
+    width: 168px;
+    flex-shrink: 0;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-secondary);
+  }
+
+  .rec-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .rec-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .rec-title {
+    font-size: 14px;
+    font-weight: 500;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .rec-channel, .rec-meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg-primary); }
+  ::-webkit-scrollbar-thumb { background: #3f3f3f; border-radius: 10px; }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main-content { margin-left: 0; width: 100%; }
+    .main-content.expanded { margin-left: 0; width: 100%; }
+    .nav-left .logo span.logo-full-text { display: none; }
+  }
+
+  @media (max-width: 1100px) {
+    .watch-layout { flex-direction: column; }
+    .watch-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; }
+    .rec-card { width: calc(50% - 8px); flex-direction: column; }
+    .rec-thumb { width: 100%; }
+  }
+
+  @media (max-width: 600px) {
+    .rec-card { width: 100%; }
+    .watch-actions { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="top-nav">
+  <div class="nav-left">
+    <button class="icon-btn" id="hamburger-btn" title="Menu">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+    </button>
+    <div class="logo" id="logo-home">
+      <span class="logo-the">The</span>
+      <span class="logo-tube-wrap">Tube</span>
+    </div>
+  </div>
+
+  <div class="nav-center">
+    <div class="search-wrapper">
+      <input type="text" class="search-input" id="search-input" placeholder="Search">
+      <button class="search-btn" id="search-btn" title="Search">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.49 19l-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="nav-right">
+    <button class="icon-btn" title="Notifications">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+    </button>
+    <button class="icon-btn" id="settings-btn" title="Settings">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.61l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.66 8.87a.5.5 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.5.5 0 0 0-.12.61l1.92 3.32c.14.24.4.34.65.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.42.5.42h3.84c.24 0 .46-.18.5-.42l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.25.12.51.02.65-.22l1.92-3.32a.5.5 0 0 0-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+    </button>
+    <!-- Signed OUT state -->
+    <button class="signin-btn" id="signin-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
+      Log in
+    </button>
+    <!-- Signed IN state -->
+    <div class="account-menu" id="account-menu" style="display:none">
+      <button class="avatar-circle" id="account-avatar-btn" title="Your Account">U</button>
+      <div class="account-dropdown" id="account-dropdown">
+        <div class="account-dropdown-name" id="account-dropdown-name"></div>
+        <div class="account-dropdown-email" id="account-dropdown-email">Local account on this browser</div>
+        <button class="account-signout-btn" id="signout-btn">Log out</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- LOGIN / SIGN UP MODAL — local accounts only, stored in this browser.
+     Not real authentication; a personal pinboard, not a security system. -->
+<div class="modal-backdrop" id="auth-backdrop">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h2 id="auth-modal-title">Log in</h2>
+      <button class="icon-btn" id="auth-close" title="Close">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+
+    <label class="modal-label" for="auth-username">Username</label>
+    <input type="text" id="auth-username" class="modal-input" autocomplete="off">
+    <label class="modal-label" for="auth-password" style="margin-top:12px;">Password</label>
+    <input type="password" id="auth-password" class="modal-input" autocomplete="off">
+
+    <p class="modal-hint">
+      This is a local account on this browser only — used to save your pinned channels.
+      It isn't a secure login system; don't reuse a real password here.
+    </p>
+    <p class="modal-error" id="auth-error"></p>
+
+    <div class="modal-actions">
+      <button class="modal-btn secondary" id="auth-toggle-mode">Need an account? Sign up</button>
+      <button class="modal-btn primary" id="auth-submit-btn">Log in</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- SETTINGS MODAL: shows whether the backend proxy is connected -->
+<div class="modal-backdrop" id="settings-backdrop">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h2>Data source</h2>
+      <button class="icon-btn" id="settings-close" title="Close">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+
+    <p class="modal-status" id="modal-status">Currently showing demo content.</p>
+    <p class="modal-hint">
+      Real YouTube data is served through a backend proxy so the API key never
+      reaches this page — nothing for visitors to configure. See
+      <code>youtube-proxy-worker.js</code> in the project files for the one-time
+      server setup.
+    </p>
+    <p class="modal-error" id="modal-error"></p>
+
+    <div class="modal-actions">
+      <button class="modal-btn secondary" id="use-demo-btn">Use demo data</button>
+      <button class="modal-btn primary" id="connect-btn">Retry connection</button>
+    </div>
+
+    <div class="modal-divider"></div>
+
+    <h3 class="modal-subheading">Video player</h3>
+    <p class="modal-hint">
+      If a video won't load, try a different player here — this becomes
+      your default for every video going forward.
+    </p>
+    <div class="player-picker" id="player-picker"></div>
+  </div>
+</div>
+
+<div class="app-body">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="nav-section">
+      <a href="#" class="nav-item active" data-nav="home">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3z"/></svg>
+        <span class="label">Home</span>
+      </a>
+      <a href="#" class="nav-item" data-nav="trending">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 11-14h-7z"/></svg>
+        <span class="label">Trending</span>
+      </a>
+      <a href="#" class="nav-item" data-nav="playlists">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10h11v2H3v-2zm0-4h11v2H3V6zm0 8h7v2H3v-2zm13-1v6l5-3-5-3z"/></svg>
+        <span class="label">Playlists</span>
+      </a>
+      <a href="#" class="nav-item" data-nav="history">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6a7 7 0 1 1 2.05 4.95l-1.42 1.42A9 9 0 1 0 13 3zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8z"/></svg>
+        <span class="label">History</span>
+      </a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">More from The Tube</div>
+      <a href="#" class="nav-item" data-nav="subs">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 18v-6l5 3-5 3zm12-11.5s-.2-1.4-.8-2c-.8-.8-1.6-.8-2-.9C16.4 3.3 12 3.3 12 3.3s-4.4 0-7.2.3c-.4 0-1.2.1-2 .9-.6.6-.8 2-.8 2S1.8 8.4 1.8 10.4v1.7c0 2 .2 4 .2 4s.2 1.4.8 2c.8.8 1.9.8 2.3.9 1.7.2 7 .3 7 .3s4.4 0 7.2-.3c.4 0 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-2 .2-4v-1.7c0-2-.2-3.9-.2-3.9z"/></svg>
+        <span class="label">Subscriptions</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="main-content">
+
+    <!-- HOME VIEW: category chips + search results grid -->
+    <div id="home-view">
+      <div class="category-chips" id="category-chips">
+        <button class="chip active" data-cat="all">All</button>
+        <button class="chip" data-cat="gaming">Gaming</button>
+        <button class="chip" data-cat="tech">Tech</button>
+        <button class="chip" data-cat="music">Music</button>
+        <button class="chip" data-cat="podcasts">Podcasts</button>
+        <button class="chip" data-cat="comedy">Comedy</button>
+        <button class="chip" data-cat="science">Science</button>
+      </div>
+
+      <div class="subs-back-row" id="subs-back-row" style="display:none;">
+        <button class="subs-back-btn" id="subs-back-btn">&larr; All subscriptions</button>
+        <span id="subs-channel-heading"></span>
+      </div>
+      <div class="subs-channel-grid" id="subs-channel-grid" style="display:none;"></div>
+      <div class="subs-signin-prompt" id="subs-signin-prompt" style="display:none;">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
+        <p>Log in to pin channels you want quick access to.</p>
+        <button class="modal-btn primary" id="subs-signin-btn">Log in</button>
+      </div>
+
+      <div class="search-channel-row" id="search-channel-row" style="display:none;"></div>
+
+      <div class="video-grid" id="video-grid"></div>
+      <div class="no-results" id="no-results" style="display:none;">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.49 19l-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg>
+        <p>No results found. Try a different search term.</p>
+      </div>
+      <div class="load-more-row" id="load-more-row" style="display:none;">
+        <button class="load-more-btn" id="load-more-btn">Show more</button>
+      </div>
+    </div>
+
+    <!-- WATCH VIEW: seamless SPA video page, swapped in via JS -->
+    <div id="watch-view">
+      <div class="watch-layout">
+        <div class="watch-main">
+          <div class="watch-player-wrapper" id="player-wrapper">
+            <canvas id="watch-canvas"></canvas>
+            <iframe id="yt-real-iframe" style="display:none" title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+            <div class="yt-fallback-overlay" id="yt-fallback-overlay">
+              <div class="yt-fallback-card">
+                <p id="yt-fallback-msg">Loading…</p>
+                <div class="yt-fallback-actions">
+                  <button type="button" class="yt-fallback-btn" id="yt-skip-btn">Switch player in Settings</button>
+                  <a class="yt-fallback-btn primary" id="yt-open-btn" href="#" target="_blank" rel="noopener">Open on YouTube ↗</a>
+                </div>
+              </div>
+            </div>
+            <div class="player-center-btn" id="player-center-btn">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="player-controls" id="player-controls">
+              <div class="progress-track" id="progress-track">
+                <div class="progress-fill" id="progress-fill"></div>
+                <div class="progress-handle" id="progress-handle"></div>
+              </div>
+              <div class="controls-row">
+                <button class="player-btn" id="play-pause-btn" title="Play/Pause">
+                  <svg id="icon-play" viewBox="0 0 24 24" width="22" height="22" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
+                  <svg id="icon-pause" viewBox="0 0 24 24" width="22" height="22" fill="#fff" style="display:none"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+                </button>
+                <button class="player-btn" id="mute-btn" title="Mute/Unmute">
+                  <svg id="icon-vol" viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                  <svg id="icon-mute" viewBox="0 0 24 24" width="20" height="20" fill="#fff" style="display:none"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.17l2.45 2.45c.03-.2.05-.39.05-.59zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4l-1.88 1.88L12 7.76V4z"/></svg>
+                </button>
+                <span class="time-display" id="time-display">0:00 / 0:00</span>
+                <div class="controls-spacer"></div>
+                <button class="player-btn" id="fullscreen-btn" title="Fullscreen">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <a class="yt-fallback-link" id="yt-fallback-link" href="#" target="_blank" rel="noopener" style="display:none">Having trouble playing here? Watch on YouTube ↗</a>
+
+          <div class="watch-title" id="watch-title"></div>
+
+          <div class="watch-meta-row">
+            <div class="watch-channel-info">
+              <div class="channel-avatar" id="watch-avatar"></div>
+              <div class="watch-channel-text">
+                <span class="watch-channel-name" id="watch-channel-name"></span>
+                <span class="watch-channel-sub" id="watch-channel-sub"></span>
+              </div>
+              <button class="action-pill" id="subscribe-btn" style="margin-left:16px;">Subscribe</button>
+            </div>
+            <div class="watch-actions">
+              <button class="action-pill" id="like-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                Like
+              </button>
+              <button class="action-pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+                Share
+              </button>
+              <button class="action-pill">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 10V4l-1-1H4l-1 1v13l1 1h6v-1H4V4h9v6h1z"/><path d="M18 13v-2l-3 3 3 3v-2h4v-2z"/></svg>
+                Save
+              </button>
+            </div>
+          </div>
+
+          <div class="watch-description" id="watch-description">
+            <div class="desc-stats" id="watch-desc-stats"></div>
+            <div id="watch-desc-text"></div>
+          </div>
+
+          <div class="comments-section" id="comments-section">
+            <div class="comments-count" id="comments-count">Comments</div>
+            <div id="comment-compose-slot"></div>
+            <div id="comments-list"></div>
+          </div>
+        </div>
+
+        <div class="watch-sidebar">
+          <div class="rec-sidebar-title">Recommended</div>
+          <div id="recommended-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  /* ============================================================
+     MOCK DATABASE — Diverse YouTube-style video catalogue spanning
+     Gaming, Tech, Music, Podcasts, Comedy, and Science, featuring
+     realistic titles in the style of well-known real-world creators.
+
+     NOTE ON MEDIA: thumbnails are generated as stylized placeholder
+     graphics (not scraped real thumbnails). Playback is rendered by a
+     self-contained canvas animation (see VideoPlayer below) rather
+     than a network-hosted video file, so it always plays reliably
+     regardless of network/embedding restrictions in the preview
+     environment. Titles are original/illustrative rather than copies
+     of exact real video titles.
+     ============================================================ */
+
+  const CATEGORY_COLORS = {
+    gaming: "e0245e",
+    tech: "2d7dd2",
+    science: "2ec4b6",
+    comedy: "ff9f1c",
+    podcasts: "8338ec",
+    music: "d6249f"
+  };
+
+  const VIDEO_DB = [
+    // ---------------- GAMING ----------------
+    { title: "I Spent 50 Hours Surviving In A Minecraft Wasteland", channelName: "MrBeast Gaming", views: "38M views", timestamp: "4 months ago", category: "gaming" },
+    { title: "This Horror Game Broke Me (FNAF Into Madness) - Part 1", channelName: "Markiplier", views: "6.2M views", timestamp: "2 weeks ago", category: "gaming" },
+    { title: "Resident Evil Village - Part 1 - A Man And His Wife", channelName: "Jacksepticeye", views: "5.8M views", timestamp: "3 weeks ago", category: "gaming" },
+    { title: "Reacting To The Weirdest Games On The Internet", channelName: "PewDiePie", views: "9.1M views", timestamp: "1 month ago", category: "gaming" },
+    { title: "1v1 Against My Subscribers - Fortnite Chapter 6", channelName: "Ninja", views: "3.4M views", timestamp: "5 days ago", category: "gaming" },
+    { title: "Minecraft Speedrunner VS 3 Hunters GRAND FINALE", channelName: "Dream", views: "44M views", timestamp: "3 years ago", category: "gaming" },
+    { title: "I Played Every Game Genre For 24 Hours Straight", channelName: "Ludwig", views: "2.7M views", timestamp: "2 months ago", category: "gaming" },
+    { title: "Among Us But Everyone Is An Impostor", channelName: "Valkyrae", views: "4.5M views", timestamp: "1 year ago", category: "gaming" },
+    { title: "GTA RP But It's My First Day As A Cop", channelName: "CoryxKenshin", views: "3.1M views", timestamp: "6 days ago", category: "gaming" },
+    { title: "Can We Beat Elden Ring Using Only A Guitar Controller?", channelName: "Jacksepticeye", views: "5.3M views", timestamp: "3 months ago", category: "gaming" },
+
+    // ---------------- TECH ----------------
+    { title: "The Ultimate Smartphone Review (2026)", channelName: "MKBHD", views: "14M views", timestamp: "2 weeks ago", category: "tech" },
+    { title: "Why This Laptop Changes Everything", channelName: "MKBHD", views: "7.9M views", timestamp: "1 month ago", category: "tech" },
+    { title: "The Weirdest Gadgets Of The Year", channelName: "Unbox Therapy", views: "5.6M views", timestamp: "3 weeks ago", category: "tech" },
+    { title: "We Built The World's Fastest Gaming PC", channelName: "Linus Tech Tips", views: "8.2M views", timestamp: "1 week ago", category: "tech" },
+    { title: "Unboxing Every Apple Product Released This Year", channelName: "iJustine", views: "4.4M views", timestamp: "2 months ago", category: "tech" },
+    { title: "I Tested 100 Phone Cameras In One Video", channelName: "Mrwhosetheboss", views: "9.8M views", timestamp: "5 months ago", category: "tech" },
+    { title: "This Ultrabook Is Almost Too Good", channelName: "Dave2D", views: "2.9M views", timestamp: "4 days ago", category: "tech" },
+    { title: "Building My Dream Home Studio Setup", channelName: "Marques Brownlee", views: "3.6M views", timestamp: "6 months ago", category: "tech" },
+    { title: "Is This The Most Overengineered Phone Ever Made?", channelName: "Unbox Therapy", views: "4.9M views", timestamp: "1 year ago", category: "tech" },
+
+    // ---------------- SCIENCE / ENGINEERING ----------------
+    { title: "The Illusion That Breaks Your Brain", channelName: "Veritasium", views: "22M views", timestamp: "7 months ago", category: "science" },
+    { title: "I Built A Robot To Solve A Rubik's Cube In 0.3 Seconds", channelName: "Mark Rober", views: "31M views", timestamp: "1 year ago", category: "science" },
+    { title: "World's Largest Glitter Bomb Vs Package Thieves", channelName: "Mark Rober", views: "112M views", timestamp: "3 years ago", category: "science" },
+    { title: "What If The Sun Disappeared Tomorrow?", channelName: "Kurzgesagt – In a Nutshell", views: "18M views", timestamp: "2 years ago", category: "science" },
+    { title: "Why Gravity Is Not Actually A Force", channelName: "Veritasium", views: "12M views", timestamp: "5 months ago", category: "science" },
+    { title: "The Physics Of A Perfect Paper Airplane", channelName: "SmarterEveryDay", views: "6.7M views", timestamp: "8 months ago", category: "science" },
+    { title: "The Last Human — A Glimpse Into The Far Future", channelName: "Kurzgesagt – In a Nutshell", views: "26M views", timestamp: "2 years ago", category: "science" },
+    { title: "I Engineered A Squirrel-Proof Obstacle Course", channelName: "Mark Rober", views: "89M views", timestamp: "4 years ago", category: "science" },
+    { title: "How Do Airplanes Actually Stay In The Air?", channelName: "Veritasium", views: "9.4M views", timestamp: "3 months ago", category: "science" },
+
+    // ---------------- COMEDY / VLOGS ----------------
+    { title: "I Bought The World's Most Expensive Watch (Daily Vlog)", channelName: "Logan Paul", views: "3.8M views", timestamp: "1 week ago", category: "comedy" },
+    { title: "A Day In My Life Filming In New York City", channelName: "Casey Neistat", views: "5.1M views", timestamp: "5 years ago", category: "comedy" },
+    { title: "Pranking My Neighbors For 24 Hours Straight", channelName: "Danny Duncan", views: "4.6M views", timestamp: "2 months ago", category: "comedy" },
+    { title: "Get Ready With Me For The Biggest Night Of The Year", channelName: "Emma Chamberlain", views: "6.9M views", timestamp: "3 weeks ago", category: "comedy" },
+    { title: "Surprising My Best Friend With A New Car", channelName: "David Dobrik", views: "11M views", timestamp: "4 years ago", category: "comedy" },
+    { title: "I Traveled To Every US State In One Week", channelName: "Airrack", views: "7.3M views", timestamp: "1 year ago", category: "comedy" },
+    { title: "Trying Stand-Up Comedy For The First Time", channelName: "Druski", views: "2.2M views", timestamp: "6 days ago", category: "comedy" },
+    { title: "We Turned Our Office Into An Escape Room", channelName: "Dude Perfect", views: "8.8M views", timestamp: "2 weeks ago", category: "comedy" },
+
+    // ---------------- PODCASTS ----------------
+    { title: "#2145 - A Conversation On Technology And The Future", channelName: "The Joe Rogan Experience", views: "9.6M views", timestamp: "3 days ago", category: "podcasts" },
+    { title: "Talking Boxing, Business, And Life Choices", channelName: "Impaulsive", views: "2.4M views", timestamp: "1 week ago", category: "podcasts" },
+    { title: "Reacting To The Internet's Biggest Drama This Week", channelName: "H3 Podcast", views: "3.7M views", timestamp: "4 days ago", category: "podcasts" },
+    { title: "How The YouTube Algorithm Really Works In 2026", channelName: "Colin and Samir", views: "1.9M views", timestamp: "2 weeks ago", category: "podcasts" },
+    { title: "A Candid Conversation About Fame And Friendship", channelName: "Call Her Daddy", views: "5.2M views", timestamp: "5 days ago", category: "podcasts" },
+    { title: "Debating The Future Of Space Exploration", channelName: "The Joe Rogan Experience", views: "7.8M views", timestamp: "2 months ago", category: "podcasts" },
+    { title: "Unpacking A Week Of Wild Internet News", channelName: "H3 Podcast", views: "2.6M views", timestamp: "3 weeks ago", category: "podcasts" },
+
+    // ---------------- MUSIC ----------------
+    { title: "Official Music Video - Summer Anthem 2026", channelName: "Dua Lipa", views: "48M views", timestamp: "6 months ago", category: "music" },
+    { title: "Official Music Video - Late Night Drive", channelName: "The Weeknd", views: "61M views", timestamp: "1 year ago", category: "music" },
+    { title: "Official Lyric Video - Neon Lights", channelName: "Billie Eilish", views: "33M views", timestamp: "8 months ago", category: "music" },
+    { title: "Official Music Video - Fireworks", channelName: "Bad Bunny", views: "72M views", timestamp: "5 months ago", category: "music" },
+    { title: "Live Performance - Award Show Medley", channelName: "Taylor Swift", views: "19M views", timestamp: "3 months ago", category: "music" },
+    { title: "Official Music Video - Golden Hour", channelName: "Ariana Grande", views: "40M views", timestamp: "10 months ago", category: "music" },
+    { title: "Behind The Scenes - Making Of The Album", channelName: "Dua Lipa", views: "6.4M views", timestamp: "4 months ago", category: "music" }
+  ];
+
+  // Precompute derived fields for every entry: a stylized placeholder
+  // thumbnail (colored per category), a stable duration, and a "scene"
+  // seed the canvas player uses to render its animation — all computed
+  // locally so playback never depends on an external file loading.
+  const SCENES = ["particles", "bars", "orbit", "waves", "grid"];
+  VIDEO_DB.forEach((v, i) => {
+    v.id = `vid-${i}`;
+    const color = CATEGORY_COLORS[v.category] || "303030";
+    const label = encodeURIComponent(v.channelName);
+    v.thumbnail = `https://placehold.co/640x360/${color}/ffffff?font=roboto&text=${label}`;
+    v.durationSeconds = 60 + Math.floor(Math.random() * 11 * 60); // 1–12 min
+    v.durationLabel = formatTime(v.durationSeconds);
+    v.scene = SCENES[i % SCENES.length];
+    v.hex = "#" + (CATEGORY_COLORS[v.category] || "303030");
+  });
+
+  const CHANNEL_INITIALS = c => c.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
+
+  function formatTime(totalSeconds) {
+    totalSeconds = Math.max(0, Math.floor(totalSeconds));
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  }
+
+  function generateDescription(v) {
+    const templates = {
+      gaming: `Full gameplay and commentary from ${v.channelName}. Like and subscribe for more let's plays, challenges, and reactions.`,
+      tech: `An in-depth look from ${v.channelName}. Subscribe for more reviews, unboxings, and breakdowns of the latest tech.`,
+      science: `${v.channelName} breaks down the science and engineering behind this topic. Subscribe for more deep dives.`,
+      comedy: `Come along for the ride with ${v.channelName}. New videos every week — subscribe so you don't miss the next one.`,
+      podcasts: `A full-length conversation on ${v.channelName}. New episodes drop regularly — subscribe and turn on notifications.`,
+      music: `Official content from ${v.channelName}. Stream and subscribe for more.`
+    };
+    return templates[v.category] || `Uploaded by ${v.channelName}.`;
+  }
+
+
+  /* ============================================================
+     REAL YOUTUBE DATA — via a backend proxy you deploy yourself.
+     The actual YouTube API key lives ONLY on that server (see the
+     companion youtube-proxy-worker.js file) — it never ships to
+     the browser, so every visitor gets real data with zero setup
+     on their end. Set PROXY_BASE_URL below once, after deploying.
+     ============================================================ */
+  const PROXY_BASE_URL = "https://broad-resonance-c0a6.abdulla-speedify.workers.dev"; // your deployed proxy
+
+  let dataSource = "demo"; // "demo" | "real"
+  let REAL_VIDEO_DB = [];
+
+  function activeDB() {
+    return dataSource === "real" ? REAL_VIDEO_DB : VIDEO_DB;
+  }
+
+  function parseISODuration(iso) {
+    const m = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/.exec(iso || "");
+    if (!m) return 0;
+    const h = parseInt(m[1] || 0, 10), min = parseInt(m[2] || 0, 10), s = parseInt(m[3] || 0, 10);
+    return h * 3600 + min * 60 + s;
+  }
+
+  function formatViews(n) {
+    n = parseInt(n, 10) || 0;
+    if (n >= 1e9) return (n / 1e9).toFixed(1).replace(/\.0$/, "") + "B views";
+    if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M views";
+    if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, "") + "K views";
+    return n + " views";
+  }
+
+  function formatRelativeTime(iso) {
+    const then = new Date(iso).getTime();
+    const diffSec = Math.max(1, Math.floor((Date.now() - then) / 1000));
+    const units = [["year", 31536000], ["month", 2592000], ["week", 604800], ["day", 86400], ["hour", 3600], ["minute", 60]];
+    for (const [name, secs] of units) {
+      const val = Math.floor(diffSec / secs);
+      if (val >= 1) return `${val} ${name}${val > 1 ? "s" : ""} ago`;
+    }
+    return "just now";
+  }
+
+  // Calls YOUR proxy, not YouTube directly — no key ever touches
+  // the browser. The proxy forwards to YouTube and injects its
+  // own server-side secret.
+  async function ytFetch(path, params) {
+    if (!PROXY_BASE_URL) throw new Error("No proxy configured yet.");
+    const url = new URL(`${PROXY_BASE_URL}/youtube/${path}`);
+    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+    const res = await fetch(url.toString());
+    const json = await res.json();
+    if (!res.ok) {
+      const msg = json?.error || json?.error?.message || `Request failed (${res.status})`;
+      throw new Error(msg);
+    }
+    return json;
+  }
+
+  // Turns a list of video IDs into our internal card shape using
+  // videos.list (gives us statistics + contentDetails in one call).
+  async function hydrateVideoIds(ids) {
+    if (!ids.length) return [];
+    const data = await ytFetch("videos", { part: "snippet,statistics,contentDetails", id: ids.join(",") });
+    return (data.items || []).map(item => {
+      const durationSeconds = parseISODuration(item.contentDetails?.duration);
+      return {
+        id: "yt-" + item.id,
+        youtubeId: item.id,
+        channelId: item.snippet?.channelId || null,
+        source: "real",
+        title: item.snippet?.title || "Untitled",
+        channelName: item.snippet?.channelTitle || "Unknown channel",
+        views: formatViews(item.statistics?.viewCount),
+        timestamp: formatRelativeTime(item.snippet?.publishedAt),
+        category: "all",
+        thumbnail: item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.default?.url,
+        durationSeconds,
+        durationLabel: formatTime(durationSeconds),
+        description: item.snippet?.description || ""
+      };
+    });
+  }
+
+  async function fetchTrending(pageToken) {
+    const params = { part: "id", chart: "mostPopular", maxResults: 24, regionCode: "US" };
+    if (pageToken) params.pageToken = pageToken;
+    const data = await ytFetch("videos", params);
+    const ids = (data.items || []).map(i => i.id);
+    const videos = await hydrateVideoIds(ids);
+    return { videos, nextPageToken: data.nextPageToken || null };
+  }
+
+  // One search.list call, asking for both channel and video results at once
+  // (type accepts a comma list) — same 100-unit cost as a video-only search,
+  // so surfacing matching channels here is free compared to a second call.
+  async function fetchYtSearch(query, pageToken) {
+    const params = { part: "snippet", q: query, type: "video,channel", maxResults: 24 };
+    if (pageToken) params.pageToken = pageToken;
+    const data = await ytFetch("search", params);
+    const items = data.items || [];
+
+    const channels = items
+      .filter(i => i.id?.kind === "youtube#channel")
+      .map(i => ({
+        channelId: i.id.channelId,
+        title: i.snippet?.channelTitle || i.snippet?.title || "",
+        thumbnail: i.snippet?.thumbnails?.medium?.url || i.snippet?.thumbnails?.default?.url || "",
+      }))
+      .filter(c => c.channelId);
+
+    const ids = items
+      .filter(i => i.id?.kind === "youtube#video")
+      .map(i => i.id.videoId)
+      .filter(Boolean);
+    const videos = await hydrateVideoIds(ids);
+    return { videos, channels, nextPageToken: data.nextPageToken || null };
+  }
+
+  // A channel's uploads playlist is much cheaper to page through than
+  // search.list (1 unit vs 100), so subscriptions browsing uses this
+  // instead of search — same reason the trending page does.
+  async function fetchChannelUploads(channelId, uploadsPlaylistId, pageToken) {
+    let plId = uploadsPlaylistId;
+    if (!plId) {
+      const chData = await ytFetch("channels", { part: "contentDetails", id: channelId });
+      plId = chData?.items?.[0]?.contentDetails?.relatedPlaylists?.uploads || null;
+    }
+    if (!plId) return { videos: [], nextPageToken: null, uploadsPlaylistId: null };
+    const params = { part: "snippet", playlistId: plId, maxResults: 24 };
+    if (pageToken) params.pageToken = pageToken;
+    const plData = await ytFetch("playlistItems", params);
+    const ids = (plData.items || []).map(i => i.snippet?.resourceId?.videoId).filter(Boolean);
+    const videos = await hydrateVideoIds(ids);
+    return { videos, nextPageToken: plData.nextPageToken || null, uploadsPlaylistId: plId };
+  }
+
+  /* ---- Pagination state for the currently active real-data query ---- */
+  let pagination = {
+    nextPageToken: null,
+    kind: null,   // "trending" | "search" | "channel"
+    arg: null,    // search term, or { channelId, uploadsPlaylistId } for "channel"
+    loading: false
+  };
+
+  const loadMoreRow = document.getElementById("load-more-row");
+  const loadMoreBtn = document.getElementById("load-more-btn");
+
+  function updateLoadMoreVisibility() {
+    loadMoreRow.style.display = (dataSource === "real" && pagination.nextPageToken) ? "flex" : "none";
+  }
+
+  async function loadMoreResults() {
+    if (pagination.loading || !pagination.nextPageToken) return;
+    pagination.loading = true;
+    loadMoreBtn.disabled = true;
+    loadMoreBtn.textContent = "Loading…";
+    try {
+      let videos, nextPageToken;
+      if (pagination.kind === "search") {
+        ({ videos, nextPageToken } = await fetchYtSearch(pagination.arg, pagination.nextPageToken));
+      } else if (pagination.kind === "channel") {
+        const result = await fetchChannelUploads(pagination.arg.channelId, pagination.arg.uploadsPlaylistId, pagination.nextPageToken);
+        videos = result.videos; nextPageToken = result.nextPageToken;
+      } else {
+        ({ videos, nextPageToken } = await fetchTrending(pagination.nextPageToken));
+      }
+      const existingIds = new Set(REAL_VIDEO_DB.map(v => v.id));
+      REAL_VIDEO_DB = REAL_VIDEO_DB.concat(videos.filter(v => !existingIds.has(v.id)));
+      pagination.nextPageToken = nextPageToken;
+      doSearch();
+    } catch (err) {
+      // Quietly stop offering more rather than interrupting the page
+      pagination.nextPageToken = null;
+    } finally {
+      pagination.loading = false;
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.textContent = "Show more";
+      updateLoadMoreVisibility();
+    }
+  }
+
+  loadMoreBtn.addEventListener("click", loadMoreResults);
+
+  // Auto-load the next page as the person nears the bottom of the
+  // page, same as YouTube's own infinite scroll — the button above
+  // still works too, as a manual fallback.
+  window.addEventListener("scroll", () => {
+    if (!homeView || homeView.classList.contains("hidden")) return;
+    if (pagination.loading || !pagination.nextPageToken) return;
+    const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 800;
+    if (nearBottom) loadMoreResults();
+  });
+
+  /* ---- Settings modal wiring — status only, nothing to type in ---- */
+  const settingsBackdrop = document.getElementById("settings-backdrop");
+  const modalStatus = document.getElementById("modal-status");
+  const modalError = document.getElementById("modal-error");
+  const connectBtn = document.getElementById("connect-btn");
+  const useDemoBtn = document.getElementById("use-demo-btn");
+
+  function refreshModalStatus() {
+    if (dataSource === "real") {
+      modalStatus.textContent = `Connected — showing real YouTube results (${REAL_VIDEO_DB.length} videos loaded).`;
+      modalStatus.classList.add("connected");
+    } else if (!PROXY_BASE_URL) {
+      modalStatus.textContent = "No proxy configured yet — showing demo content. See youtube-proxy-worker.js to set one up.";
+      modalStatus.classList.remove("connected");
+    } else {
+      modalStatus.textContent = "Currently showing demo content.";
+      modalStatus.classList.remove("connected");
+    }
+  }
+
+  async function connectToProxy() {
+    connectBtn.disabled = true;
+    connectBtn.textContent = "Connecting…";
+    modalError.textContent = "";
+    try {
+      const { videos, nextPageToken } = await fetchTrending();
+      if (!videos.length) throw new Error("No videos returned from the proxy.");
+      REAL_VIDEO_DB = videos;
+      pagination = { nextPageToken, kind: "trending", arg: null, loading: false };
+      dataSource = "real";
+      refreshModalStatus();
+      showHomePanels();
+      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      document.querySelector('.chip[data-cat="all"]').classList.add("active");
+      searchInput.value = "";
+      doSearch();
+      updateLoadMoreVisibility();
+    } catch (err) {
+      dataSource = "demo";
+      modalError.textContent = err.message || "Couldn't reach the proxy.";
+      refreshModalStatus();
+    } finally {
+      connectBtn.disabled = false;
+      connectBtn.textContent = "Retry connection";
+    }
+  }
+
+  function openSettingsModal() {
+    modalError.textContent = "";
+    refreshModalStatus();
+    renderPlayerPicker();
+    settingsBackdrop.classList.add("active");
+  }
+
+  document.getElementById("settings-btn").addEventListener("click", openSettingsModal);
+  document.getElementById("settings-close").addEventListener("click", () => {
+    settingsBackdrop.classList.remove("active");
+  });
+  settingsBackdrop.addEventListener("click", (e) => {
+    if (e.target === settingsBackdrop) settingsBackdrop.classList.remove("active");
+  });
+
+  connectBtn.addEventListener("click", connectToProxy);
+
+  const playerPicker = document.getElementById("player-picker");
+  function renderPlayerPicker() {
+    const current = getPreferredPlayerIndex();
+    playerPicker.innerHTML = "";
+    YT_PLAYERS.forEach((p, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "player-option" + (idx === current ? " selected" : "");
+      btn.innerHTML = `<span class="player-check"></span><span>${escapeHtml(p.label)}</span>`;
+      btn.addEventListener("click", () => {
+        setPreferredPlayerIndex(idx);
+        renderPlayerPicker();
+        // If a real video is currently open, switch it live instead of
+        // waiting for the next video to pick up the new preference.
+        if (watchingRealVideo) loadRealVideo(watchingRealVideo);
+      });
+      playerPicker.appendChild(btn);
+    });
+  }
+
+  useDemoBtn.addEventListener("click", () => {
+    dataSource = "demo";
+    REAL_VIDEO_DB = [];
+    pagination = { nextPageToken: null, kind: null, arg: null, loading: false };
+    modalError.textContent = "";
+    refreshModalStatus();
+    showHomePanels();
+    renderChannelResults([]);
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    document.querySelector('.chip[data-cat="all"]').classList.add("active");
+    searchInput.value = "";
+    doSearch();
+  });
+
+  // Try connecting automatically on page load — this is the whole
+  // point of the proxy: visitors get real data with no action needed.
+  if (PROXY_BASE_URL) connectToProxy();
+
+
+  const homeView = document.getElementById("home-view");
+  const watchView = document.getElementById("watch-view");
+  const videoGrid = document.getElementById("video-grid");
+  const noResults = document.getElementById("no-results");
+  const categoryChipsEl = document.getElementById("category-chips");
+
+  function showHomePanels() {
+    categoryChipsEl.style.display = "flex";
+    videoGrid.style.display = "grid";
+    document.getElementById("subs-back-row").style.display = "none";
+    document.getElementById("subs-channel-grid").style.display = "none";
+    document.getElementById("subs-signin-prompt").style.display = "none";
+  }
+
+  function renderVideos(list) {
+    videoGrid.innerHTML = "";
+    if (list.length === 0) {
+      noResults.style.display = "block";
+      return;
+    }
+    noResults.style.display = "none";
+
+    list.forEach(video => {
+      const card = document.createElement("div");
+      card.className = "video-card";
+      card.dataset.videoId = video.id;
+
+      card.innerHTML = `
+        <div class="thumbnail-wrapper">
+          <img src="${video.thumbnail}" alt="${escapeHtml(video.title)}" loading="lazy">
+          <span class="duration-badge">${video.durationLabel}</span>
+        </div>
+        <div class="video-info">
+          <div class="channel-avatar">${CHANNEL_INITIALS(video.channelName)}</div>
+          <div class="video-text">
+            <div class="video-title">${escapeHtml(video.title)}</div>
+            <div class="channel-name">${escapeHtml(video.channelName)}</div>
+            <div class="video-meta">${video.views} &middot; ${video.timestamp}</div>
+          </div>
+        </div>
+      `;
+
+      card.addEventListener("click", () => openWatchView(video));
+      videoGrid.appendChild(card);
+    });
+  }
+
+  /* ============================================================
+     SEARCH — local filtering for demo data, live queries against
+     the real YouTube Data API when connected
+     ============================================================ */
+  const searchInput = document.getElementById("search-input");
+  const searchBtn = document.getElementById("search-btn");
+
+  function doSearch() {
+    const query = searchInput.value.trim().toLowerCase();
+    const activeCat = document.querySelector(".chip.active")?.dataset.cat || "all";
+
+    let filtered = activeDB();
+
+    if (activeCat !== "all" && dataSource === "demo") {
+      filtered = filtered.filter(v => v.category === activeCat);
+    }
+
+    if (query.length > 0) {
+      const isFreshRealResults = dataSource === "real" && pagination.kind === "search" &&
+        pagination.arg && pagination.arg.toLowerCase() === query;
+      if (!isFreshRealResults) {
+        filtered = filtered.filter(v =>
+          v.title.toLowerCase().includes(query) ||
+          v.channelName.toLowerCase().includes(query) ||
+          (v.category || "").toLowerCase().includes(query)
+        );
+      }
+    }
+
+    renderVideos(filtered);
+    if (filtered.length === 0) {
+      loadMoreRow.style.display = "none";
+    } else {
+      updateLoadMoreVisibility();
+    }
+  }
+
+  function renderChannelResults(channels) {
+    if (!channels || !channels.length) {
+      searchChannelRow.style.display = "none";
+      searchChannelRow.innerHTML = "";
+      return;
+    }
+    searchChannelRow.style.display = "flex";
+    searchChannelRow.innerHTML = channels.map(ch => `
+      <div class="search-channel-card" data-channel-id="${escapeHtml(ch.channelId)}" data-channel-title="${escapeHtml(ch.title)}">
+        <img src="${escapeHtml(ch.thumbnail)}" alt="">
+        <div class="search-channel-info">
+          <span class="search-channel-name">${escapeHtml(ch.title)}</span>
+          <span class="search-channel-tag">Channel</span>
+        </div>
+        <button type="button" class="search-channel-sub-btn"></button>
+      </div>
+    `).join("");
+    searchChannelRow.querySelectorAll(".search-channel-card").forEach(card => {
+      const channelId = card.dataset.channelId;
+      const title = card.dataset.channelTitle;
+      const thumbnail = card.querySelector("img").src;
+      const subBtn = card.querySelector(".search-channel-sub-btn");
+
+      function refreshSubBtn() {
+        const pinned = isPinned(channelId);
+        subBtn.textContent = pinned ? "Subscribed" : "Subscribe";
+        subBtn.classList.toggle("active-toggle", pinned);
+      }
+      refreshSubBtn();
+
+      subBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // don't also trigger the card's "open channel" click
+        togglePin({ channelId, title, thumbnail });
+        refreshSubBtn();
+      });
+      card.addEventListener("click", () => openChannelUploads(channelId, title));
+    });
+  }
+
+  // For real data: typing filters what's already loaded instantly (no
+  // quota cost), while a short debounce also fires a live YouTube
+  // search in the background — so results show up as you type without
+  // needing to press Enter, same as real YouTube's suggestion behavior.
+  // Enter / clicking search still forces an immediate live search too.
+  async function performRealQuery(term) {
+    if (dataSource !== "real" || !term) { doSearch(); return; }
+    showHomePanels();
+    videoGrid.innerHTML = `<div class="loading-msg">Searching YouTube for "${term}"…</div>`;
+    noResults.style.display = "none";
+    loadMoreRow.style.display = "none";
+    searchChannelRow.style.display = "none";
+    try {
+      const { videos, channels, nextPageToken } = await fetchYtSearch(term);
+      REAL_VIDEO_DB = videos;
+      pagination = { nextPageToken, kind: "search", arg: term, loading: false };
+      renderChannelResults(channels);
+      doSearch();
+      updateLoadMoreVisibility();
+    } catch (err) {
+      videoGrid.innerHTML = `<div class="loading-msg">Search failed: ${escapeHtml(err.message || "unknown error")}</div>`;
+    }
+  }
+
+  searchBtn.addEventListener("click", () => {
+    const query = searchInput.value.trim();
+    clearTimeout(searchDebounceTimer);
+    if (dataSource === "real" && query) performRealQuery(query); else doSearch();
+  });
+
+  let searchDebounceTimer = null;
+  searchInput.addEventListener("input", () => {
+    doSearch(); // instant feedback from whatever's already loaded
+    if (dataSource !== "real") return;
+    clearTimeout(searchDebounceTimer);
+    const term = searchInput.value.trim();
+    if (term.length >= 2) {
+      searchDebounceTimer = setTimeout(() => performRealQuery(term), 450);
+    } else if (term.length === 0) {
+      // Cleared the box — go back to trending instead of leaving stale search results
+      pagination = { nextPageToken: null, kind: "trending", arg: null, loading: false };
+      renderChannelResults([]);
+      fetchTrending().then(({ videos, nextPageToken }) => {
+        REAL_VIDEO_DB = videos;
+        pagination.nextPageToken = nextPageToken;
+        doSearch();
+        updateLoadMoreVisibility();
+      }).catch(() => doSearch());
+    }
+  });
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    clearTimeout(searchDebounceTimer);
+    const query = searchInput.value.trim();
+    if (dataSource === "real" && query) performRealQuery(query); else doSearch();
+  });
+
+  // Category chip filtering
+  document.getElementById("category-chips").addEventListener("click", (e) => {
+    const chip = e.target.closest(".chip");
+    if (!chip) return;
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    const cat = chip.dataset.cat;
+    if (dataSource === "real" && cat !== "all") {
+      performRealQuery(cat);
+    } else if (dataSource === "real" && cat === "all") {
+      renderChannelResults([]);
+      fetchTrending().then(({ videos, nextPageToken }) => {
+        REAL_VIDEO_DB = videos;
+        pagination = { nextPageToken, kind: "trending", arg: null, loading: false };
+        doSearch();
+        updateLoadMoreVisibility();
+      }).catch(() => doSearch());
+    } else {
+      doSearch();
+    }
+  });
+
+  /* ============================================================
+     SIDEBAR TOGGLE
+     ============================================================ */
+  const sidebar = document.getElementById("sidebar");
+  const mainContent = document.getElementById("main-content");
+  document.getElementById("hamburger-btn").addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+    mainContent.classList.toggle("expanded");
+  });
+
+  // Sidebar nav active state + always return to the home grid (no other
+  // sub-pages exist yet, so any nav click should feel like a fresh start)
+  document.querySelectorAll(".nav-item").forEach(item => {
+    item.addEventListener("click", (e) => {
+      e.preventDefault();
+      document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
+      if (item.dataset.nav === "subs") {
+        openSubscriptionsView();
+      } else {
+        goHome();
+      }
+    });
+  });
+
+  document.getElementById("logo-home").addEventListener("click", () => {
+    document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
+    document.querySelector('.nav-item[data-nav="home"]').classList.add("active");
+    searchInput.value = "";
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    document.querySelector('.chip[data-cat="all"]').classList.add("active");
+    goHome();
+  });
+
+  /* ============================================================
+     SUBSCRIPTIONS VIEW — real subscribed channels (via OAuth),
+     click one to browse their real recent uploads.
+     ============================================================ */
+  const subsBackRow = document.getElementById("subs-back-row");
+  const subsBackBtn = document.getElementById("subs-back-btn");
+  const subsChannelHeading = document.getElementById("subs-channel-heading");
+  const subsChannelGrid = document.getElementById("subs-channel-grid");
+  const subsSigninPrompt = document.getElementById("subs-signin-prompt");
+  const subsSigninBtn = document.getElementById("subs-signin-btn");
+  const searchChannelRow = document.getElementById("search-channel-row");
+
+  function hideAllHomePanels() {
+    categoryChipsEl.style.display = "none";
+    videoGrid.style.display = "none";
+    noResults.style.display = "none";
+    loadMoreRow.style.display = "none";
+    subsBackRow.style.display = "none";
+    subsChannelGrid.style.display = "none";
+    subsSigninPrompt.style.display = "none";
+    searchChannelRow.style.display = "none";
+  }
+
+  async function openSubscriptionsView() {
+    watchView.classList.remove("active");
+    homeView.classList.remove("hidden");
+    hideAllHomePanels();
+
+    if (!currentUser) {
+      subsSigninPrompt.style.display = "block";
+      return;
+    }
+
+    subsChannelGrid.style.display = "grid";
+    const channels = getMyPinned();
+    if (!channels.length) {
+      subsChannelGrid.innerHTML = `<p class="comment-loading">You haven't pinned any channels yet — hit Subscribe on a video to add one.</p>`;
+      return;
+    }
+    subsChannelGrid.innerHTML = channels.map(ch => `
+      <div class="subs-channel-card" data-channel-id="${escapeHtml(ch.channelId)}" data-channel-title="${escapeHtml(ch.title)}">
+        <img src="${escapeHtml(ch.thumbnail || "")}" alt="">
+        <span class="subs-channel-name">${escapeHtml(ch.title)}</span>
+      </div>
+    `).join("");
+    subsChannelGrid.querySelectorAll(".subs-channel-card").forEach(card => {
+      card.addEventListener("click", () => {
+        openChannelUploads(card.dataset.channelId, card.dataset.channelTitle);
+      });
+    });
+  }
+
+  async function openChannelUploads(channelId, channelTitle) {
+    hideAllHomePanels();
+    subsBackRow.style.display = "flex";
+    subsChannelHeading.textContent = channelTitle;
+    videoGrid.style.display = "grid";
+    videoGrid.innerHTML = `<div class="loading-msg">Loading videos from ${escapeHtml(channelTitle)}…</div>`;
+
+    dataSource = "real";
+    try {
+      // Reuse the cached uploads-playlist ID if this channel is pinned and
+      // we've already resolved it once — skips a redundant channels.list call.
+      const cachedId = getMyPinned().find(c => c.channelId === channelId)?.uploadsPlaylistId || null;
+      const { videos, nextPageToken, uploadsPlaylistId } = await fetchChannelUploads(channelId, cachedId);
+      if (!cachedId && uploadsPlaylistId) cachePinnedPlaylistId(channelId, uploadsPlaylistId);
+      REAL_VIDEO_DB = videos;
+      pagination = { nextPageToken, kind: "channel", arg: { channelId, uploadsPlaylistId }, loading: false };
+      searchInput.value = "";
+      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      renderVideos(videos);
+      if (videos.length === 0) {
+        videoGrid.style.display = "none";
+        noResults.style.display = "block";
+        noResults.querySelector("p").textContent = `${channelTitle} has no public uploads to show.`;
+      }
+      updateLoadMoreVisibility();
+    } catch (err) {
+      videoGrid.innerHTML = `<div class="loading-msg">Couldn't load videos (${escapeHtml(err.message || "unknown error")}).</div>`;
+    }
+  }
+
+  subsBackBtn.addEventListener("click", openSubscriptionsView);
+  subsSigninBtn.addEventListener("click", () => signinBtn.click());
+
+  /* ============================================================
+     CANVAS PLAYER ENGINE — a fully self-contained "video" player.
+     No network file ever loads; the picture is drawn live on a
+     <canvas> each frame, driven by a real play/pause/seek clock.
+     This guarantees playback always works, in any environment.
+     ============================================================ */
+  const playerWrapper = document.getElementById("player-wrapper");
+  const canvas = document.getElementById("watch-canvas");
+  const ctx = canvas.getContext("2d");
+  const centerBtn = document.getElementById("player-center-btn");
+  const playPauseBtn = document.getElementById("play-pause-btn");
+  const iconPlay = document.getElementById("icon-play");
+  const iconPause = document.getElementById("icon-pause");
+  const muteBtn = document.getElementById("mute-btn");
+  const iconVol = document.getElementById("icon-vol");
+  const iconMute = document.getElementById("icon-mute");
+  const timeDisplay = document.getElementById("time-display");
+  const progressTrack = document.getElementById("progress-track");
+  const progressFill = document.getElementById("progress-fill");
+  const progressHandle = document.getElementById("progress-handle");
+  const fullscreenBtn = document.getElementById("fullscreen-btn");
+
+  const player = {
+    video: null,
+    playing: false,
+    muted: false,
+    currentTime: 0,
+    duration: 0,
+    lastFrameTs: null,
+    rafId: null
+  };
+
+  function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener("resize", resizeCanvas);
+
+  function hexToRgb(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+
+  // Draws one frame of a procedurally-animated "scene" so there is
+  // always motion on screen — the visual stand-in for real footage.
+  function drawFrame() {
+    const w = canvas.getBoundingClientRect().width;
+    const h = canvas.getBoundingClientRect().height;
+    if (!w || !h || !player.video) return;
+    const t = player.currentTime;
+    const [r, g, b] = hexToRgb(player.video.hex);
+
+    ctx.clearRect(0, 0, w, h);
+    const grad = ctx.createLinearGradient(0, 0, w, h);
+    grad.addColorStop(0, `rgb(${r},${g},${b})`);
+    grad.addColorStop(1, `rgb(${Math.max(0,r-60)},${Math.max(0,g-60)},${Math.max(0,b-60)})`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.save();
+    ctx.globalAlpha = 0.85;
+    ctx.fillStyle = "#fff";
+
+    switch (player.video.scene) {
+      case "particles": {
+        for (let i = 0; i < 22; i++) {
+          const ang = (i / 22) * Math.PI * 2 + t * 0.6;
+          const radius = 40 + (i % 5) * 22 + Math.sin(t * 1.3 + i) * 14;
+          const x = w / 2 + Math.cos(ang) * radius * (w / 900);
+          const y = h / 2 + Math.sin(ang) * radius * (h / 500);
+          const size = 4 + (i % 4) * 2;
+          ctx.globalAlpha = 0.25 + 0.5 * Math.abs(Math.sin(t + i));
+          ctx.beginPath();
+          ctx.arc(x, y, size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        break;
+      }
+      case "bars": {
+        const bars = 28;
+        const bw = w / bars;
+        for (let i = 0; i < bars; i++) {
+          const amp = (Math.sin(t * 3 + i * 0.8) + 1) / 2;
+          const bh = 20 + amp * (h * 0.5);
+          ctx.globalAlpha = 0.55 + amp * 0.4;
+          ctx.fillRect(i * bw + bw * 0.15, h - bh, bw * 0.7, bh);
+        }
+        break;
+      }
+      case "orbit": {
+        const cx = w / 2, cy = h / 2;
+        for (let i = 0; i < 6; i++) {
+          const orbitR = 30 + i * (Math.min(w, h) * 0.06);
+          const ang = t * (0.5 + i * 0.15) + i;
+          const x = cx + Math.cos(ang) * orbitR * (w / 700);
+          const y = cy + Math.sin(ang) * orbitR * (h / 400);
+          ctx.globalAlpha = 0.7;
+          ctx.beginPath();
+          ctx.arc(x, y, 7 - i * 0.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 0.15;
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, orbitR * (w / 700), orbitR * (h / 400), 0, 0, Math.PI * 2);
+          ctx.strokeStyle = "#fff";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+        break;
+      }
+      case "waves": {
+        for (let line = 0; line < 3; line++) {
+          ctx.globalAlpha = 0.3 + line * 0.2;
+          ctx.beginPath();
+          for (let x = 0; x <= w; x += 8) {
+            const y = h / 2 + Math.sin(x * 0.02 + t * (2 + line) + line) * (24 + line * 12);
+            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = "#fff";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        }
+        break;
+      }
+      case "grid": {
+        const cols = 10, rows = 6;
+        const cw = w / cols, ch = h / rows;
+        for (let cIdx = 0; cIdx < cols; cIdx++) {
+          for (let rIdx = 0; rIdx < rows; rIdx++) {
+            const phase = Math.sin(t * 2 + cIdx * 0.5 + rIdx * 0.5);
+            if (phase > 0.3) {
+              ctx.globalAlpha = phase * 0.6;
+              ctx.fillRect(cIdx * cw + 3, rIdx * ch + 3, cw - 6, ch - 6);
+            }
+          }
+        }
+        break;
+      }
+    }
+    ctx.restore();
+
+    // Center label so it still reads clearly as this video's content
+    ctx.save();
+    ctx.globalAlpha = 0.9;
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    const labelW = Math.min(w * 0.7, 420);
+    ctx.fillRect(w / 2 - labelW / 2, h - 46, labelW, 30);
+    ctx.fillStyle = "#fff";
+    ctx.font = "600 14px Roboto, Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(player.video.channelName, w / 2, h - 31);
+    ctx.restore();
+  }
+
+  function tick(ts) {
+    if (player.lastFrameTs === null) player.lastFrameTs = ts;
+    const delta = (ts - player.lastFrameTs) / 1000;
+    player.lastFrameTs = ts;
+
+    if (player.playing) {
+      player.currentTime = Math.min(player.duration, player.currentTime + delta);
+      if (player.currentTime >= player.duration) {
+        setPlaying(false);
+        player.currentTime = player.duration;
+      }
+    }
+    drawFrame();
+    updateProgressUI();
+    player.rafId = requestAnimationFrame(tick);
+  }
+
+  function updateProgressUI() {
+    const pct = player.duration ? (player.currentTime / player.duration) * 100 : 0;
+    progressFill.style.width = pct + "%";
+    progressHandle.style.left = pct + "%";
+    timeDisplay.textContent = `${formatTime(player.currentTime)} / ${formatTime(player.duration)}`;
+  }
+
+  function setPlaying(shouldPlay) {
+    player.playing = shouldPlay;
+    iconPlay.style.display = shouldPlay ? "none" : "block";
+    iconPause.style.display = shouldPlay ? "block" : "none";
+    centerBtn.classList.toggle("show", !shouldPlay);
+    playerWrapper.classList.toggle("paused", !shouldPlay);
+  }
+
+  function loadVideoIntoPlayer(video) {
+    player.video = video;
+    player.duration = video.durationSeconds;
+    player.currentTime = 0;
+    player.lastFrameTs = null;
+    resizeCanvas();
+    setPlaying(true); // user just clicked a thumbnail — real user gesture
+    updateProgressUI();
+    if (player.rafId) cancelAnimationFrame(player.rafId);
+    player.rafId = requestAnimationFrame(tick);
+  }
+
+  function stopPlayer() {
+    if (player.rafId) cancelAnimationFrame(player.rafId);
+    player.rafId = null;
+    player.playing = false;
+    player.video = null;
+  }
+
+  function togglePlay() { setPlaying(!player.playing); }
+
+  playPauseBtn.addEventListener("click", togglePlay);
+  canvas.addEventListener("click", togglePlay);
+  centerBtn.addEventListener("click", togglePlay);
+
+  muteBtn.addEventListener("click", () => {
+    player.muted = !player.muted;
+    iconVol.style.display = player.muted ? "none" : "block";
+    iconMute.style.display = player.muted ? "block" : "none";
+  });
+
+  fullscreenBtn.addEventListener("click", () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      playerWrapper.requestFullscreen?.();
+    }
+  });
+
+  function seekFromEvent(e) {
+    const rect = progressTrack.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const pct = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    player.currentTime = pct * player.duration;
+    updateProgressUI();
+    drawFrame();
+  }
+
+  let scrubbing = false;
+  progressTrack.addEventListener("mousedown", (e) => {
+    scrubbing = true;
+    playerWrapper.classList.add("scrubbing");
+    seekFromEvent(e);
+  });
+  window.addEventListener("mousemove", (e) => { if (scrubbing) seekFromEvent(e); });
+  window.addEventListener("mouseup", () => {
+    if (scrubbing) { scrubbing = false; playerWrapper.classList.remove("scrubbing"); }
+  });
+
+  // Touch equivalents — without these, dragging the scrub bar silently does
+  // nothing on iPad/mobile (touch devices don't fire mouse events at all).
+  // { passive: false } + preventDefault stops the page from scrolling while
+  // someone's trying to drag the seek bar.
+  progressTrack.addEventListener("touchstart", (e) => {
+    scrubbing = true;
+    playerWrapper.classList.add("scrubbing");
+    seekFromEvent(e);
+    e.preventDefault();
+  }, { passive: false });
+  window.addEventListener("touchmove", (e) => {
+    if (!scrubbing) return;
+    seekFromEvent(e);
+    e.preventDefault();
+  }, { passive: false });
+  window.addEventListener("touchend", () => {
+    if (scrubbing) { scrubbing = false; playerWrapper.classList.remove("scrubbing"); }
+  });
+
+  const watchTitle = document.getElementById("watch-title");
+  const watchAvatar = document.getElementById("watch-avatar");
+  const watchChannelName = document.getElementById("watch-channel-name");
+  const watchChannelSub = document.getElementById("watch-channel-sub");
+  const watchDescStats = document.getElementById("watch-desc-stats");
+  const watchDescText = document.getElementById("watch-desc-text");
+  const recommendedList = document.getElementById("recommended-list");
+
+  function getRecommendations(current) {
+    const db = activeDB();
+    const sameCategory = db.filter(v => v.id !== current.id && v.category === current.category);
+    const others = db.filter(v => v.id !== current.id && v.category !== current.category);
+    return [...sameCategory, ...others].slice(0, 10);
+  }
+
+  function renderRecommendations(current) {
+    const recs = getRecommendations(current);
+    recommendedList.innerHTML = "";
+
+    recs.forEach(video => {
+      const card = document.createElement("div");
+      card.className = "rec-card";
+      card.innerHTML = `
+        <div class="rec-thumb">
+          <img src="${video.thumbnail}" alt="${escapeHtml(video.title)}" loading="lazy">
+        </div>
+        <div class="rec-info">
+          <div class="rec-title">${escapeHtml(video.title)}</div>
+          <div class="rec-channel">${escapeHtml(video.channelName)}</div>
+          <div class="rec-meta">${video.views} &middot; ${video.timestamp}</div>
+        </div>
+      `;
+      card.addEventListener("click", () => openWatchView(video));
+      recommendedList.appendChild(card);
+    });
+  }
+
+  const ytIframe = document.getElementById("yt-real-iframe");
+  const ytFallbackLink = document.getElementById("yt-fallback-link");
+  const ytOverlay = document.getElementById("yt-fallback-overlay");
+  const ytFallbackMsg = document.getElementById("yt-fallback-msg");
+  const ytSkipBtn = document.getElementById("yt-skip-btn");
+  const ytOpenBtn = document.getElementById("yt-open-btn");
+
+  // Players the person can pick between in Settings. YouTube's own two
+  // domains, plus Piped — an independent (non-Google) frontend that pulls
+  // the same public YouTube videos through its own servers.
+  //
+  // Invidious instances were tried and dropped: their public servers have
+  // increasingly added their own bot-defense walls (CAPTCHAs, "go-away"
+  // challenges) or are simply overloaded volunteer servers — since they're
+  // free, donation-funded, and getting hammered by scraper traffic, several
+  // now actively resist being embedded from someone else's site at all,
+  // which shows up as a "Forbidden" page or an iframe that just spins
+  // forever. That's a policy/capacity issue on their end, not something a
+  // different embed URL or CSP tweak here can fix.
+  const YT_PLAYERS = [
+    { label: "Player 1 — YouTube", buildUrl: id => `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` },
+    { label: "Player 2 — YouTube (privacy-enhanced)", buildUrl: id => `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0` },
+    { label: "Player 3 — Piped (piped.video)", buildUrl: id => `https://piped.video/embed/${id}?autoplay=1` },
+    { label: "Player 4 — Piped (kavin.rocks)", buildUrl: id => `https://piped.kavin.rocks/embed/${id}?autoplay=1` },
+  ];
+  const YT_PLAYER_STORAGE_KEY = "the-tube-preferred-player";
+
+  let watchingRealVideo = null; // the {youtubeId,...} video currently loaded in the real player
+
+  function getPreferredPlayerIndex() {
+    const saved = parseInt(localStorage.getItem(YT_PLAYER_STORAGE_KEY), 10);
+    return Number.isInteger(saved) && saved >= 0 && saved < YT_PLAYERS.length ? saved : 0;
+  }
+  function setPreferredPlayerIndex(idx) {
+    localStorage.setItem(YT_PLAYER_STORAGE_KEY, String(idx));
+  }
+
+  function ytShowLoadFailed() {
+    ytFallbackMsg.textContent = "This player didn't load. Pick a different one in Settings.";
+    ytOverlay.classList.add("show");
+  }
+
+  function ytHideOverlay() {
+    ytOverlay.classList.remove("show");
+  }
+
+  function loadRealVideo(video) {
+    watchingRealVideo = video;
+    ytHideOverlay();
+    const player = YT_PLAYERS[getPreferredPlayerIndex()];
+    ytIframe.src = player.buildUrl(video.youtubeId);
+  }
+
+  function startRealVideoChain(video) {
+    loadRealVideo(video);
+  }
+
+  function stopRealVideoChain() {
+    ytHideOverlay();
+    watchingRealVideo = null;
+  }
+
+  // A real, genuine load failure (not a timer guess) — e.g. the network
+  // request itself failed. Shows a small persistent notice pointing at
+  // Settings rather than auto-switching anything on its own.
+  ytIframe.addEventListener("error", () => {
+    if (!watchingRealVideo) return;
+    ytShowLoadFailed();
+  });
+
+  ytSkipBtn.addEventListener("click", () => {
+    openSettingsModal();
+  });
+
+
+
+  /* ============================================================
+     LOCAL ACCOUNTS — username/password stored in this browser only.
+     NOT real authentication or security: it's a personal pinboard so
+     "Subscribe" here means "save to my list", not a real YouTube
+     subscription. Passwords are lightly hashed (SHA-256, no salt) so
+     they aren't sitting in plain text, but this offers no real
+     protection against someone with access to this browser — treat
+     it like a bookmark list, not a login system.
+     ============================================================ */
+  const ACCOUNTS_KEY = "thetube_accounts_v1";
+  const SESSION_KEY = "thetube_current_user_v1";
+
+  let currentUser = null; // username string | null
+
+  function loadAccounts() {
+    try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)) || {}; }
+    catch { return {}; }
+  }
+  function saveAccounts(accounts) {
+    localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+  }
+
+  async function hashPassword(pw) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pw));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  function getMyPinned() {
+    if (!currentUser) return [];
+    const accounts = loadAccounts();
+    return accounts[currentUser]?.pinned || [];
+  }
+  function saveMyPinned(pinnedList) {
+    if (!currentUser) return;
+    const accounts = loadAccounts();
+    if (!accounts[currentUser]) return;
+    accounts[currentUser].pinned = pinnedList;
+    saveAccounts(accounts);
+  }
+  function isPinned(channelId) {
+    return getMyPinned().some(c => c.channelId === channelId);
+  }
+  function togglePin(channel) {
+    const pinned = getMyPinned();
+    const idx = pinned.findIndex(c => c.channelId === channel.channelId);
+    if (idx >= 0) pinned.splice(idx, 1); else pinned.push(channel);
+    saveMyPinned(pinned);
+    return idx < 0; // true if it's now pinned
+  }
+  // A channel's uploads-playlist ID never changes, so once we've looked it
+  // up we cache it directly on the pinned record — this is the whole point
+  // of pinning a channel: opening it again should cost one API call
+  // (playlistItems), not two (channels + playlistItems), let alone a search.
+  function cachePinnedPlaylistId(channelId, uploadsPlaylistId) {
+    if (!currentUser || !uploadsPlaylistId) return;
+    const pinned = getMyPinned();
+    const entry = pinned.find(c => c.channelId === channelId);
+    if (entry && entry.uploadsPlaylistId !== uploadsPlaylistId) {
+      entry.uploadsPlaylistId = uploadsPlaylistId;
+      saveMyPinned(pinned);
+    }
+  }
+
+  const signinBtn = document.getElementById("signin-btn");
+  const accountMenu = document.getElementById("account-menu");
+  const accountAvatarBtn = document.getElementById("account-avatar-btn");
+  const accountDropdown = document.getElementById("account-dropdown");
+  const accountDropdownName = document.getElementById("account-dropdown-name");
+  const signoutBtn = document.getElementById("signout-btn");
+
+  function updateAccountUI() {
+    if (currentUser) {
+      signinBtn.style.display = "none";
+      accountMenu.style.display = "block";
+      accountAvatarBtn.textContent = CHANNEL_INITIALS(currentUser);
+      accountDropdownName.textContent = currentUser;
+    } else {
+      signinBtn.style.display = "flex";
+      accountMenu.style.display = "none";
+      accountDropdown.classList.remove("open");
+    }
+  }
+
+  // Restore session on load
+  try {
+    const savedUser = localStorage.getItem(SESSION_KEY);
+    if (savedUser && loadAccounts()[savedUser]) currentUser = savedUser;
+  } catch {}
+  updateAccountUI();
+
+  signinBtn.addEventListener("click", () => openAuthModal("login"));
+  accountAvatarBtn.addEventListener("click", () => accountDropdown.classList.toggle("open"));
+  document.addEventListener("click", (e) => {
+    if (!accountMenu.contains(e.target)) accountDropdown.classList.remove("open");
+  });
+  signoutBtn.addEventListener("click", () => {
+    currentUser = null;
+    localStorage.removeItem(SESSION_KEY);
+    updateAccountUI();
+    refreshWatchInteractions();
+  });
+
+  /* ---- Auth modal ---- */
+  const authBackdrop = document.getElementById("auth-backdrop");
+  const authModalTitle = document.getElementById("auth-modal-title");
+  const authUsername = document.getElementById("auth-username");
+  const authPassword = document.getElementById("auth-password");
+  const authError = document.getElementById("auth-error");
+  const authToggleMode = document.getElementById("auth-toggle-mode");
+  const authSubmitBtn = document.getElementById("auth-submit-btn");
+
+  let authMode = "login"; // "login" | "signup"
+
+  function openAuthModal(mode) {
+    authMode = mode;
+    authUsername.value = "";
+    authPassword.value = "";
+    authError.textContent = "";
+    authModalTitle.textContent = mode === "login" ? "Log in" : "Sign up";
+    authSubmitBtn.textContent = mode === "login" ? "Log in" : "Sign up";
+    authToggleMode.textContent = mode === "login" ? "Need an account? Sign up" : "Already have an account? Log in";
+    authBackdrop.classList.add("active");
+    authUsername.focus();
+  }
+
+  document.getElementById("auth-close").addEventListener("click", () => authBackdrop.classList.remove("active"));
+  authBackdrop.addEventListener("click", (e) => { if (e.target === authBackdrop) authBackdrop.classList.remove("active"); });
+  authToggleMode.addEventListener("click", () => openAuthModal(authMode === "login" ? "signup" : "login"));
+
+  authSubmitBtn.addEventListener("click", async () => {
+    const username = authUsername.value.trim();
+    const password = authPassword.value;
+    if (!username || !password) { authError.textContent = "Enter a username and password."; return; }
+
+    const accounts = loadAccounts();
+    if (authMode === "signup") {
+      if (accounts[username]) { authError.textContent = "That username is taken."; return; }
+      accounts[username] = { passwordHash: await hashPassword(password), pinned: [] };
+      saveAccounts(accounts);
+      currentUser = username;
+    } else {
+      const account = accounts[username];
+      if (!account || account.passwordHash !== await hashPassword(password)) {
+        authError.textContent = "Incorrect username or password.";
+        return;
+      }
+      currentUser = username;
+    }
+    localStorage.setItem(SESSION_KEY, currentUser);
+    authBackdrop.classList.remove("active");
+    updateAccountUI();
+    refreshWatchInteractions();
+    if (subsSigninPrompt.style.display !== "none") openSubscriptionsView();
+  });
+
+  /* ---- Comments (read-only — pulled through our proxy with the
+     server key; there's no real account behind this to post as) ---- */
+  async function fetchComments(videoId) {
+    const data = await ytFetch("commentThreads", { part: "snippet", videoId, maxResults: 20, order: "relevance" });
+    return (data.items || []).map(t => {
+      const c = t.snippet.topLevelComment.snippet;
+      return {
+        id: t.id,
+        author: c.authorDisplayName,
+        avatar: c.authorProfileImageUrl,
+        text: c.textDisplay,
+        time: formatRelativeTime(c.publishedAt)
+      };
+    });
+  }
+
+  /* ---- Wiring all of the above into the watch page ---- */
+  const subscribeBtn = document.getElementById("subscribe-btn");
+  const likeBtn = document.getElementById("like-btn");
+  const commentsCount = document.getElementById("comments-count");
+  const commentComposeSlot = document.getElementById("comment-compose-slot");
+  const commentsList = document.getElementById("comments-list");
+
+  let currentWatchVideo = null;
+
+  function refreshWatchInteractions() {
+    if (currentWatchVideo) setupWatchInteractions(currentWatchVideo);
+  }
+
+  async function setupWatchInteractions(video) {
+    currentWatchVideo = video;
+    const isReal = video.source === "real";
+
+    /* Subscribe = local pin only. Never touches real YouTube. */
+    subscribeBtn.onclick = null;
+    if (!isReal) {
+      subscribeBtn.textContent = "Subscribed";
+      subscribeBtn.title = "Demo content — not a real channel";
+      subscribeBtn.classList.remove("active-toggle");
+      subscribeBtn.disabled = true;
+    } else if (!currentUser) {
+      subscribeBtn.textContent = "Subscribe";
+      subscribeBtn.title = "Log in to pin this channel";
+      subscribeBtn.classList.remove("active-toggle");
+      subscribeBtn.disabled = false;
+      subscribeBtn.onclick = () => openAuthModal("login");
+    } else {
+      subscribeBtn.disabled = false;
+      renderSubscribeState(video);
+    }
+
+    /* Like = a purely local, cosmetic toggle. Doesn't affect the real video. */
+    likeBtn.onclick = null;
+    if (!isReal) {
+      likeBtn.disabled = true;
+      likeBtn.title = "Not available for demo content";
+      likeBtn.classList.remove("active-toggle");
+    } else if (!currentUser) {
+      likeBtn.disabled = false;
+      likeBtn.title = "Log in to like";
+      likeBtn.classList.remove("active-toggle");
+      likeBtn.onclick = () => openAuthModal("login");
+    } else {
+      likeBtn.disabled = false;
+      likeBtn.title = "";
+      likeBtn.classList.toggle("active-toggle", isLocallyLiked(video.youtubeId));
+      likeBtn.onclick = () => {
+        likeBtn.classList.toggle("active-toggle", toggleLocalLike(video.youtubeId));
+      };
+    }
+
+    /* Comments — real, read-only (no posting; that needed a real
+       signed-in YouTube account, which this app no longer has) */
+    commentComposeSlot.innerHTML = "";
+    if (!isReal) {
+      commentsCount.textContent = "Comments";
+      commentsList.innerHTML = `<p class="comment-loading">Comments aren't available for demo content.</p>`;
+      return;
+    }
+    commentsList.innerHTML = `<p class="comment-loading">Loading comments…</p>`;
+    try {
+      const comments = await fetchComments(video.youtubeId);
+      if (currentWatchVideo !== video) return;
+      commentsCount.textContent = `${comments.length} Comments`;
+      commentsList.innerHTML = comments.map(c => `
+        <div class="comment-item">
+          <div class="channel-avatar" style="background-image:url('${escapeHtml(c.avatar || "")}');background-size:cover;">${c.avatar ? "" : CHANNEL_INITIALS(c.author)}</div>
+          <div class="comment-body">
+            <div class="comment-author-row">
+              <span class="comment-author">${escapeHtml(c.author)}</span>
+              <span class="comment-time">${c.time}</span>
+            </div>
+            <div class="comment-text">${escapeHtml(c.text)}</div>
+          </div>
+        </div>
+      `).join("") || `<p class="comment-loading">No comments yet.</p>`;
+    } catch (err) {
+      if (currentWatchVideo !== video) return;
+      commentsCount.textContent = "Comments";
+      commentsList.innerHTML = `<p class="comment-loading">Couldn't load comments (${escapeHtml(err.message || "unknown error")}).</p>`;
+    }
+  }
+
+  function renderSubscribeState(video) {
+    const pinned = isPinned(video.channelId);
+    subscribeBtn.textContent = pinned ? "Subscribed" : "Subscribe";
+    subscribeBtn.title = pinned ? "Saved to your Subscriptions page" : "Pin this channel to your Subscriptions page";
+    subscribeBtn.classList.toggle("active-toggle", pinned);
+    subscribeBtn.onclick = () => {
+      togglePin({ channelId: video.channelId, title: video.channelName, thumbnail: video.thumbnail || "" });
+      renderSubscribeState(video);
+    };
+  }
+
+  // Purely local "like" — a tiny per-account list of video IDs, just
+  // for a satisfying toggle. Never sent anywhere.
+  function getMyLikes() {
+    if (!currentUser) return [];
+    const accounts = loadAccounts();
+    return accounts[currentUser]?.liked || [];
+  }
+  function isLocallyLiked(videoId) { return getMyLikes().includes(videoId); }
+  function toggleLocalLike(videoId) {
+    if (!currentUser) return false;
+    const accounts = loadAccounts();
+    if (!accounts[currentUser]) return false;
+    const liked = accounts[currentUser].liked || [];
+    const idx = liked.indexOf(videoId);
+    if (idx >= 0) liked.splice(idx, 1); else liked.push(videoId);
+    accounts[currentUser].liked = liked;
+    saveAccounts(accounts);
+    return idx < 0;
+  }
+
+  function escapeHtml(str) {
+    return String(str ?? "").replace(/[&<>"']/g, ch => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[ch]));
+  }
+
+
+
+  function openWatchView(video) {
+    // Populate player + details
+    if (video.source === "real") {
+      // Real video: use YouTube's own official embedded player, as
+      // required by their terms — plus a chain of fallback players and
+      // a direct link, since this preview sandbox may block third-party
+      // embeds and loading can be flaky.
+      stopPlayer();
+      canvas.style.display = "none";
+      document.getElementById("player-center-btn").style.display = "none";
+      document.getElementById("player-controls").style.display = "none";
+      ytIframe.style.display = "block";
+      ytOpenBtn.href = `https://www.youtube.com/watch?v=${video.youtubeId}`;
+      ytFallbackLink.href = `https://www.youtube.com/watch?v=${video.youtubeId}`;
+      ytFallbackLink.style.display = "block";
+      startRealVideoChain(video);
+    } else {
+      stopRealVideoChain();
+      ytIframe.style.display = "none";
+      ytIframe.removeAttribute("src");
+      ytFallbackLink.style.display = "none";
+      canvas.style.display = "block";
+      document.getElementById("player-center-btn").style.display = "flex";
+      document.getElementById("player-controls").style.display = "block";
+      loadVideoIntoPlayer(video);
+    }
+
+    watchTitle.textContent = video.title;
+    watchAvatar.textContent = CHANNEL_INITIALS(video.channelName);
+    watchChannelName.textContent = video.channelName;
+    watchChannelSub.textContent = video.source === "real" ? "" : "Subscribed";
+    watchDescStats.innerHTML = `${video.views} <span>&middot; ${video.timestamp}</span>`;
+    watchDescText.textContent = video.source === "real"
+      ? (video.description ? video.description.slice(0, 600) : `Uploaded by ${video.channelName}.`)
+      : generateDescription(video);
+
+    renderRecommendations(video);
+    setupWatchInteractions(video);
+
+    // Swap views — no refresh, no new tab
+    homeView.classList.add("hidden");
+    watchView.classList.add("active");
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    resizeCanvas();
+  }
+
+  function goHome() {
+    stopPlayer();
+    stopRealVideoChain();
+    ytIframe.style.display = "none";
+    ytIframe.removeAttribute("src"); // stop real playback fully
+    ytFallbackLink.style.display = "none";
+    watchView.classList.remove("active");
+    homeView.classList.remove("hidden");
+    showHomePanels();
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  }
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  renderVideos(activeDB());
+</script>
+</body>
+</html>
